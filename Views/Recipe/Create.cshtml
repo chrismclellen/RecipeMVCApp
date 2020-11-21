@@ -1,0 +1,90 @@
+﻿@model RecipeApp.Models.RecipeModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Recipe</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RecipeName" class="control-label"></label>
+                <input asp-for="RecipeName" class="form-control" />
+                <span asp-validation-for="RecipeName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecipeInstructions" class="control-label"></label>
+
+                <textarea asp-for="RecipeInstructions" class="form-control" form="create" rows="10"></textarea>
+                <span asp-validation-for="RecipeInstructions" class="text-danger"></span>
+            </div>
+            <table id="ingredientTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Ingredient Name</th>
+                        <th>Quantity</th>
+                        <th>Units</th>
+                    </tr>
+                </thead>
+                <tbody id="ingredientTableBody">
+                    <tr>
+                        <td>
+                            <input asp-for="@Model.Ingredients[0].IngredientName">
+                            <span asp-validation-for="@Model.Ingredients[0].IngredientName" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Ingredients[0].Quantity">
+                            <span asp-validation-for="@Model.Ingredients[0].Quantity" class="text-danger"></span>
+                        </td>
+                        <td>
+                            <input asp-for="@Model.Ingredients[0].UOM">
+                            <span asp-validation-for="@Model.Ingredients[0].UOM" class="text-danger"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-default" onclick="Add()">Add another ingredient</button>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script type="text/javascript">
+    let ingredientCount = 1;
+    let tableBody = document.getElementById("ingredientTableBody");
+
+    function Add() {
+        let newRow = tableBody.insertRow();
+        let newCell1 = newRow.insertCell();
+        let input1 = document.createElement("input");
+        input1.setAttribute("name", "Ingredients[" + ingredientCount + "].IngredientName");
+        input1.required = true;
+        newCell1.appendChild(input1);
+        let newCell2 = newRow.insertCell();
+        let input2 = document.createElement("input");
+        input2.setAttribute("name", "Ingredients[" + ingredientCount + "].Quantity");
+        input2.required = true;
+        newCell2.appendChild(input2);
+        let newCell3 = newRow.insertCell();
+        let input3 = document.createElement("input");
+        input3.setAttribute("name", "Ingredients[" + ingredientCount + "].UOM");
+        input3.required = true;
+        newCell3.appendChild(input3);
+    }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
